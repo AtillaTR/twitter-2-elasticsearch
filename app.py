@@ -4,21 +4,34 @@ import sys
 import configparser
 from kafka import SimpleProducer, KafkaClient
 
+
+
 class MyStreamListener(tweepy.StreamListener):
 
+    def __init__(self,api):
+        self.api = api
+        super (tweepy.StreamListener,self).__init__()
+        client = KafkaClient("localhost:9092")
+        self.producer = SimpleProducer(client,async = True,batch_send_every_n = 1000,batch_send_every_t=10)
 
     def on_status(self, status):
-
+       
         print (status.author.screen_name)
         print (status.text.encode('utf-8'))
-
-
-        return  True
+        menssagem_aux = status.text.encode('utf-8')
+        try:
+            self.producer.send_messages(b'twitterStream',menssagem_aux)
+        except exception as e :
+            print(e)
+            return False 
+        return True    
 
     def on_timeout(self):
-        print  "Tempo esgotado!"
         return True
 
+    def on_error(self,status_code):
+        print('Erro do produtor do kafka producer')
+        return True
 
 
 if __name__ == '__main__':
@@ -46,7 +59,7 @@ if __name__ == '__main__':
 
 
     # api.update_status('tweepy + oauth!')
-    myStreamListener = MyStreamListener()
+    #myStreamListener = MyStreamListener()
     myStream = tweepy.Stream(auth, listener=MyStreamListener(api))
     myStream.filter(track=consult, languages=['pt'])
 
