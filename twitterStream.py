@@ -47,9 +47,30 @@ def load_wordlist(filename):
     f.close()
     return words
 
+def make_plot(counts):
+    positiveCounts=[]
+    negativeCounts=[]
+    time=[]
+    for count in counts:
+        tuplePositive= count[0]
+        positiveCounts.append(tuplePositive[1])
+        tupleNegative= count[1]
+        negativeCounts.append(tupleNegative[1])
+    for x in range(len(counts)):
+        time.append(x)
+        posLine = plt.plot(time,positiveCounts,"bo-", label='Positive')
+        negLine = plt.plot(time,negativeCounts,"bo-", label='Negative')
+        plt.acess([0,len(counts),0,max(max(positiveCounts),max(negativeCounts)), +50])
+        plt.xlabel("Time step")
+        plt.ylabel("Word count")
+        plt.legend(loc="upper left")
+        plt.show()
+        
+        
 
-    
-    
+
+
+  
 if __name__=="__main__":
     conf = SparkConf().setMaster("local[2]").setAppName("Streamer")
     sc = SparkContext(conf=conf)
