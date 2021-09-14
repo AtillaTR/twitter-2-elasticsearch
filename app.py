@@ -1,8 +1,9 @@
 import json
+from logging import exception
 import tweepy
 import sys
 import configparser
-from kafka import SimpleProducer, KafkaClient
+from pykafka import  KafkaClient
 
 
 
@@ -12,24 +13,39 @@ class MyStreamListener(tweepy.StreamListener):
         self.api = api
         super (tweepy.StreamListener,self).__init__()
         client = KafkaClient("localhost:9092")
-        self.producer = SimpleProducer(client,async = True,batch_send_every_n = 1000,batch_send_every_t=10)
+
+        self.topic = client.topics['twitterstream']
+        
+        
 
     def on_status(self, status):
        
-        print (status.author.screen_name)
-        print (status.text.encode('utf-8'))
-        menssagem_aux = status.text.encode('utf-8')
-        try:
-            self.producer.send_messages(b'twitterStream',menssagem_aux)
-        except exception as e :
-            print(e)
-            return False 
-        return True    
+       
+        
+        menssagem_aux = "Author:"+status.author.screen_name+"\n"+"Tweet:"+status.text
+        menssagem_aux =menssagem_aux.encode('utf-8')
+        print(menssagem_aux)
+        
+        with self.topic.get_producer() as producer:
+            producer.produce(menssagem_aux)
+
+        return True
+
+            
+        
+            
+        
+        
+
+            
+
+        
+           
 
     def on_timeout(self):
         return True
 
-    def on_error(self,status_code):
+    def on_error(self,status):
         print('Erro do produtor do kafka producer')
         return True
 

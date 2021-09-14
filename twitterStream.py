@@ -6,7 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def stream (ssc, pwords, nwors, duration):
+def stream (ssc, pwords, nwords, duration):
     kfstream = KafkaUtils.createDirectStream(
         ssc, topics = ['twitterSteam'], kafkaParams = {"matadata.broker.list": 'localhost:9092'}
     )
@@ -15,12 +15,12 @@ def stream (ssc, pwords, nwors, duration):
 #Cada elemento dos tweets ira conter o texto do tweet
 #Pegamos o rastreamento com um tempo de duracao e printamos a cada passo
     words = tweets.flatMap(lambda line: line.split(" "))
-    positive = words.map(lambda word: ('Positive', 1) if word in pwords else ('Positive', 0))0
-    negative = words.map(lambda word: ('Negative ', 1) if word in pwords else ('Negative', 0))
+    positive = words.map(lambda word: ('Positive', 1) if word in pwords else ('Positive', 0))
+    negative = words.map(lambda word: ('Negative ', 1) if word in nwords else ('Negative', 0))
     allSentiments = positive.union(negative)
     sentimentCounts = allSentiments.reduceByKey(lambda x,y: x+y)
     runingSentimentCounts = sentimentCounts.updateStateByKey(updateFunction)
-    runingSentimentCounts.print()
+    print(runingSentimentCounts)
 
 #O contador mantem a contagem de palavras em todos os intervalos de tempo
 
