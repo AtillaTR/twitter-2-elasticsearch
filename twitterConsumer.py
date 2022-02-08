@@ -43,7 +43,7 @@ def basic_consume_loop(consumer, topics,i):
                 }
                 # print(message)
                 
-                elasticsearch(message,i)
+                elasticsearch(message,msg.offset())
                 i+=1 
     finally:
         # Close down consumer to commit final offsets.
