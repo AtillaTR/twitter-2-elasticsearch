@@ -1,6 +1,6 @@
 from pyspark import SparkConf, SparkContext
-from pyspark.streaming import StreamingContext
-from pyspark.streaming.kafka import KafkaUtils
+from pyspark.sql.kafka import StreamingContext
+from pyspark.sql.kafka import KafkaUtils
 import operator 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 
 def stream (ssc, pwords, nwords, duration):
     kfstream = KafkaUtils.createDirectStream(
-        ssc, topics = ['twitterSteam'], kafkaParams = {"matadata.broker.list": 'localhost:9092'}
+        ssc, topics = ['tweets'], kafkaParams = {"matadata.broker.list": 'localhost:9092'}
     )
     tweets = kfstream.map(lambda x: x[1].encode("ascii", "ignore"))
     
