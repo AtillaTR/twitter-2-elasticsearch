@@ -5,18 +5,20 @@ from elasticsearch import Elasticsearch
 
 running = True
 i=0
+# Send tweets to bonsai (Elasticsearch Server)
 def elasticsearch(message,i):
-    
-    es = Elasticsearch(['https://ou17mxuiuf:yze28xwmh2@twitter-elasticsearc-9497991191.us-east-1.bonsaisearch.net:443'])
-    
-   
-
-    es.index(index="twitter", ignore=400, doc_type='_doc',id=i, body=message)
-    print(f"JSON data {i} has pulled on Elasticsearch")
-       
-    
+    try:
+        es = Elasticsearch(['https://ou17mxuiuf:yze28xwmh2@twitter-elasticsearc-9497991191.us-east-1.bonsaisearch.net:443'])
+        
     
 
+        es.index(index="twitter", ignore=400, doc_type='_doc',id=i, body=message)
+        print(f"JSON data {i} has pulled on Elasticsearch")
+    except:
+        print('Error to send data to Elasticsearch')
+    
+    
+# Loop for kafka data consume
 def basic_consume_loop(consumer, topics,i):
     try:
         consumer.subscribe(topics)
@@ -33,15 +35,14 @@ def basic_consume_loop(consumer, topics,i):
                 elif msg.error():
                     raise KafkaException(msg.error())
             else:
-                # msg_process(msg)
-                #   
+                
 
                 message={
                     "Author": msg.key(),
                     "Tweet": msg.value()
                 
                 }
-                # print(message)
+                
                 
                 elasticsearch(message,msg.offset())
                 i+=1 
@@ -51,6 +52,8 @@ def basic_consume_loop(consumer, topics,i):
 
 def shutdown():
     running = False
+
+
 if __name__ == '__main__':
     conf = {'bootstrap.servers': 'localhost:9092',
             'group.id': "foo",
