@@ -22,7 +22,7 @@
 <br>
 
 
-  <h1 align="center"> Tweets to Elasticsearch usnig kafka
+  <h1 align="center"> Tweets to Elasticsearch using kafka
 
 
 ## :rocket: Technologys
