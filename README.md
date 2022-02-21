@@ -27,7 +27,7 @@
 
 ## :rocket: Technologys
 
-This project was developed with these technologys:
+This project was developed with these technologies:
 
 - [Python](https://docs.python.org/3/)
 - [Apache Kafka](https://kafka.apache.org/)
