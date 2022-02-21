@@ -27,7 +27,7 @@
 
 ## :rocket: Technologys
 
-This project was developed with this technologys:
+This project was developed with these technologys:
 
 - [Python](https://docs.python.org/3/)
 - [Apache Kafka](https://kafka.apache.org/)
@@ -35,7 +35,7 @@ This project was developed with this technologys:
 - [Confluent-kafka API](https://docs.confluent.io/platform/current/clients/confluent-kafka-python/html/index.html)
 
 ## 💻 Project
-  This project have the objective to enhance my knowledge with kafka and python, using kafka to send tweets to elasticsearch in real time.
+  This project has the objective to enhance my knowledge with kafka and python, using kafka to send tweets to elasticsearch in real time.
 
 
 
@@ -62,5 +62,5 @@ This project was developed with this technologys:
 
 ---
 
-Make with ♥ !
+Made with ♥ !
 
